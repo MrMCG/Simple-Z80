@@ -3,7 +3,7 @@
 
 class Register {
 public:
-	enum regName{ BC, DE, HL, NUM_OF_REG };
+	enum regName{ PC, BC, DE, HL, NUM_OF_REG };
 	struct reg {
 		int lowOrder;
 		int highOrder;
@@ -20,7 +20,7 @@ public:
 	reg* get(regName reg) const { return registerList[reg]; };
 
 private:
-	
+	void incPosition();
 
 	int accu;
 	bool flagC, flagZ;

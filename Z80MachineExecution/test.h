@@ -8,5 +8,6 @@ public:
 	testing(){};
 	~testing(){};
 
-	bool checkRegisters_1();
+	void TEST_Registers_1();
+	void TEST_Z80_1();
 };

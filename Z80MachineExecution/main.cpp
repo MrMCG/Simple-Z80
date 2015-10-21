@@ -2,7 +2,8 @@
 int main() {
 
 	testing test;
-	test.checkRegisters_1();
+	test.TEST_Registers_1();
+	test.TEST_Z80_1();
 
 	return 0;
 }
