@@ -2,8 +2,6 @@
 #include <vector>
 #include <string>
 
-
-
 class Z80{
 public:
 	Z80();
@@ -27,6 +25,10 @@ private:
 		expectingType expects;
 	};
 	std::vector< opCode >* opCodesList;
+
+
+
+
 
 
 
