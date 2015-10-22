@@ -5,16 +5,19 @@
 
 class Z80{
 public:
-	Z80(int pos = 64);
+	Z80(int pos = 64); // position that code starts
 	~Z80();
 
 	void runCode(int num);
 
 private:
 
-	void incPositionPtr(); // todo
+	int getLowOrder(int num) const;
+	int getHighOrder(int num) const;
 
+	void incPositionPtr(); // todo
 	void InitOpCodes();
+
 	struct opCode {
 		enum class expectingType{
 			NOTHING,		// NULL (no data)

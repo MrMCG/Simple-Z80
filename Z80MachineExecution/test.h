@@ -10,4 +10,5 @@ public:
 
 	void TEST_Registers_1();
 	void TEST_Z80_1();
+	void TEST_Memory_1();
 };

@@ -4,8 +4,6 @@ Z80::Z80(int pos) {
 	InitOpCodes();
 	registers = new Register();
 	registers->set(Register::PC, pos); // set code entry position
-	// TODO needs a toHex function
-	
 }
 
 Z80::~Z80() {
@@ -22,7 +20,7 @@ void Z80::InitOpCodes() {
 	opCodesList->push_back(opCode{ "LD HL, (x)", 0x2A, opCode::expectingType::ADDRESS_DOUBLE });
 	opCodesList->push_back(opCode{ "LD (x), A",  0x32, opCode::expectingType::ADDRESS_SINGLE });
 	opCodesList->push_back(opCode{ "LD A, (x)",  0x3E, opCode::expectingType::NUMBER_SINGLE });
-	opCodesList->push_back(opCode{ "CP, HL",     0xBE, opCode::expectingType::NOTHING });
+	opCodesList->push_back(opCode{ "CP, HL",     0xBC, opCode::expectingType::NOTHING });
 	opCodesList->push_back(opCode{ "JP (x)",     0xC3, opCode::expectingType::ADDRESS_SINGLE });
 	opCodesList->push_back(opCode{ "RET Z",      0xC8, opCode::expectingType::NOTHING });
 	opCodesList->push_back(opCode{ "ADC A, (x)", 0xCE, opCode::expectingType::NUMBER_SINGLE });
@@ -33,9 +31,18 @@ void Z80::InitOpCodes() {
 void Z80::runCode(int num) {
 	switch (num){
 	case 0x01:
-		registers->set(Register::BC, 5);
+		registers->set(Register::B, getLowOrder(12420));
+		registers->set(Register::C, getHighOrder(12420));
 		break;
 	default:
 		break;
 	}
+}
+
+int Z80::getLowOrder(int num) const {
+	return num % 256;
+}
+
+int Z80::getHighOrder(int num) const {
+	return num / 256;
 }

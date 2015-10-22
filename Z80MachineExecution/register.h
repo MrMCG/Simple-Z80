@@ -1,29 +1,27 @@
 #pragma once
-#include <vector>
+#include <map>
 
 class Register {
 public:
-	enum regName{ PC, BC, DE, HL, NUM_OF_REG };
-	struct reg {
-		int lowOrder;
-		int highOrder;
-	};
+	enum regName{ PC, A, B, C, D, E, F, H, L, NUM_OF_REG };
 
 	Register();
 	~Register();
 
-	void setAccu(int num);
-	int getAccu() const { return accu; };
-
 	void set(regName reg, int num);
 	void set(regName regSet, regName regData);
-	reg* get(regName reg) const { return registerList[reg]; };
+	void setDeref(regName reg, int regHexVal);
 
 private:
-	void incPosition();
+	struct regCombined {
+		regName first;
+		regName second;
+	};
 
-	int accu;
-	bool flagC, flagZ;
-	reg* registerList[NUM_OF_REG];
+	void incPositionCounter();
+	void initMap();
+	std::map<int, regCombined>* registerMap;
+
+	int* registerList[NUM_OF_REG];
 
 };
