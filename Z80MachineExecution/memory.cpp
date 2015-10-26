@@ -2,13 +2,16 @@
 
 Memory::Memory(int hexSize) {
 	
-	heap = new std::vector<int>;
-	heap->push_back(0); // inc heap so index address starts at 01;
+	heap.emplace_back(new int{ 0 }); // inc heap so index address starts at 01;
 	readInFile();
 }
 
 Memory::~Memory() {
-	delete heap;
+	heap.clear();
+}
+
+void Memory::setMem(int loc, int val) {
+	*(heap[loc]) = val;
 }
 
 void Memory::readInFile() {
@@ -30,17 +33,14 @@ void Memory::readInFile() {
 			if (data.length() == 4) {
 				data = data.substr(1, data.length() - 2);
 				if (data.compare("HL"))
-					heap->push_back(0x41);
+					heap.emplace_back(new int{ 0x41 });
 			}
-
-
-
 
 			int value;
 			std::stringstream dataConv;
 			dataConv << data;
 			dataConv >> std::hex >> value;
-			heap->push_back(value);
+			heap.emplace_back(new int{ value });
 		}
 	}
 }

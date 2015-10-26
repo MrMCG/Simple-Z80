@@ -9,6 +9,10 @@ public:
 	~testing(){};
 
 	void TEST_Registers_1();
+	void TEST_Registers_2();
+
 	void TEST_Z80_1();
+	void TEST_Z80_2();
+
 	void TEST_Memory_1();
 };

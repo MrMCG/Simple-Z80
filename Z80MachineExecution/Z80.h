@@ -1,23 +1,20 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory>
 #include "register.h"
+#include "memory.h"
+
 
 class Z80{
 public:
-	Z80(int pos = 64); // position that code starts
+	Z80(int pos = 0x64 ); // position that code starts
 	~Z80();
 
+	void begin();
 	void runCode(int num);
 
 private:
-
-	int getLowOrder(int num) const;
-	int getHighOrder(int num) const;
-
-	void incPositionPtr(); // todo
-	void InitOpCodes();
-
 	struct opCode {
 		enum class expectingType{
 			NOTHING,		// NULL (no data)
@@ -34,7 +31,13 @@ private:
 		int hex;	// opcode in hex
 		expectingType expects;	// type of data needed with opcode
 	};
-	std::vector< opCode >* opCodesList;		// list of opcodes
 
-	Register* registers;	// collection of registers
+	int getPositionData() const { return ram->getMem(registers->getPCVal()); };
+	void RET() { hasFinished = true; };
+
+	// resources
+	std::vector< opCode >* opCodesList;	// list of opcodes
+	Register* registers;				// collection of registers
+	std::shared_ptr<Memory> ram;		// stored memory
+	bool hasFinished;					// program has ended
 };

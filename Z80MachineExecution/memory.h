@@ -3,18 +3,19 @@
 #include <string>
 #include <fstream>
 #include <vector>
-
-
+#include <memory>
 
 class Memory {
 public:
 	Memory(int hexSize = 0x80);
 	~Memory();
+
+	void setMem(int loc, int val);
+	int getMem(int loc) const { return *(heap.at(loc)); };
 private:
-	static const std::string fileName;
 
 	void readInFile();
 
-	std::vector<int>* heap;
+	std::vector<std::unique_ptr<int>> heap;
 };
 

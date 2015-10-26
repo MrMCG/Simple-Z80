@@ -1,6 +1,7 @@
 #include "test.h"
 
 void testing::TEST_Registers_1() {
+	
 	Register* reg = new Register();
 
 	reg->set(Register::B, 5);
@@ -9,10 +10,26 @@ void testing::TEST_Registers_1() {
 	delete reg;
 }
 
+void testing::TEST_Registers_2() {
+	Register* reg = new Register();
+
+	reg->testFlags();
+
+	delete reg;
+}
+
 void testing::TEST_Z80_1() {
 	Z80* z80 = new Z80();
 
 	z80->runCode(0x01);
+
+	delete z80;
+}
+
+void testing::TEST_Z80_2() {
+	Z80* z80 = new Z80();
+
+	z80->begin();
 
 	delete z80;
 }
