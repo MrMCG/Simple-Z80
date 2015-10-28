@@ -23,6 +23,27 @@ void Register::initMap() {
 	};
 }
 
+void Register::displayRegisters() const {
+	std::stringstream stream;
+	stream << "  --  Registers  --  \n";
+
+	stream << "A : " << std::hex << *registerList[A] << "\t";
+	stream << "F : " << std::hex << *registerList[F] << "\n";
+
+	stream << "PC: " << std::hex << *registerList[PC] << "\n";
+
+	stream << "B : " << std::hex << *registerList[B] << "\t";
+	stream << "C : " << std::hex << *registerList[C] << "\n";
+
+	stream << "D : " << std::hex << *registerList[D] << "\t";
+	stream << "E : " << std::hex << *registerList[E] << "\n";
+
+	stream << "H : " << std::hex << *registerList[H] << "\t";
+	stream << "L : " << std::hex << *registerList[L] << "\n";
+
+	std::cout << stream.str() << std::endl;
+}
+
 void Register::set(regName reg, int num) {
 	*registerList[reg] = num;
 }
@@ -42,32 +63,21 @@ void Register::set(regPair regSet, regPair regData) {
 }
 
 void Register::setRegFromDeref(regPair regHexSet, regPair regHexData) {
-	int memLoc = getValFromPair(regHexData);			 // get memory loaction
+	int memLoc = getMemVal(regHexData);			 // get memory loaction
 	set(getMapFirst(regHexSet), ram->getMem(memLoc));	 // set low order
 	set(getMapSecond(regHexSet), ram->getMem(memLoc+1)); // set high order
 }
 
 void Register::setDerefFromReg(regPair regHexSet, regPair regHexData) {
-	int memLoc = getValFromPair(regHexSet);					// get memory locaiton
+	int memLoc = getMemVal(regHexSet);					// get memory locaiton
 	ram->setMem(memLoc, getMapFirst(regHexData));			// set low order
 	ram->setMem(memLoc+1, getMapSecond(regHexData));		// set high order
 	ram->setMem(memLoc+2, (*registerList[F] & 1) ? 1 : 0);	// set carry
 }
 
-// Bitwise test
-void Register::testFlags() {
-	setCarry();
-	clearCarry();
-	setCompare();
-	clearCompare();
-
-	setCarry();
-	setCompare();
-	clearCarry();
-	setCompare();
-	setCarry();
-	clearCompare();
-	clearCarry();
+void Register::setDerefFromA(regPair regHexSet) {
+	int memLoc = getMemVal(regHexSet);					// get memory locaiton
+	ram->setMem(memLoc, getValAt(A));			// set low order
 }
 
 

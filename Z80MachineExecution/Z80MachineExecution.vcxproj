@@ -71,6 +71,7 @@
     <ClCompile Include="Z80.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="iohandler.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="register.h" />
     <ClInclude Include="test.h" />
