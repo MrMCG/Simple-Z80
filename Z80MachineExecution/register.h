@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include "Memory.h"
+#include "utility.h"
 
 class Register {
 public:
@@ -23,7 +24,7 @@ public:
 	void set(regPair regPSet, regPair regPData);	// set double reg with value of other double reg (high/low)
 	
 	void setRegFromDeref(regPair regHexSet, regPair regHexData);	// set double reg with defreferenced value in double reg (ram) (high/low)
-	void setDerefFromReg(regPair regHexSet, regPair regHexData);	// set derefrenced double reg (ram) with value in double reg (high/low/CARRY)
+	void setDerefFromReg(regPair regHexSet, regPair regHexData);	// set derefrenced double reg (ram) with value in double reg (high/low)
 	void setDerefFromA(regPair regHexSet);	
 
 	/*  --  getters  --  */
@@ -51,8 +52,6 @@ private:
 		regName secondReg; // high order
 	};
 
-	int getLowOrder(int num) const { return num % 256; };
-	int getHighOrder(int num) const { return num / 256; };
 	regName getMapFirst(regPair regPair) const { return registerMap->at(regPair).firstReg; };
 	regName getMapSecond(regPair regPair) const { return registerMap->at(regPair).secondReg; };
 	

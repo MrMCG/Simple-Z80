@@ -49,8 +49,8 @@ void Register::set(regName reg, int num) {
 }
 
 void Register::set(regPair reg, int num) {
-	set(getMapFirst(reg), getLowOrder(num));
-	set(getMapSecond(reg), getHighOrder(num));
+	set(getMapFirst(reg), utility::getLowOrder(num));
+	set(getMapSecond(reg), utility::getHighOrder(num));
 }
 
 void Register::set(regName regSet, regName regData) {
@@ -70,9 +70,8 @@ void Register::setRegFromDeref(regPair regHexSet, regPair regHexData) {
 
 void Register::setDerefFromReg(regPair regHexSet, regPair regHexData) {
 	int memLoc = getMemVal(regHexSet);					// get memory locaiton
-	ram->setMem(memLoc, getMapFirst(regHexData));			// set low order
-	ram->setMem(memLoc+1, getMapSecond(regHexData));		// set high order
-	ram->setMem(memLoc+2, (*registerList[F] & 1) ? 1 : 0);	// set carry
+	ram->setMem(memLoc, getValAt(getMapFirst(regHexData)));			// set low order
+	ram->setMem(memLoc+1, getValAt(getMapSecond(regHexData)));		// set high order
 }
 
 void Register::setDerefFromA(regPair regHexSet) {

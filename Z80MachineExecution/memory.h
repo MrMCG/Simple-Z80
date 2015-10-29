@@ -7,11 +7,11 @@
 class Memory {
 public:
 
-	static const int maxSize = 0x80;
+	static const int maxHeapSize = 0x80;
 	static const int regHL = 0x41;
-	static const int codeStart = 0x64;
+	static const int codeEntry = 0x64;
 
-	Memory(int hexSize = maxSize);
+	Memory(int hexSize = maxHeapSize);
 	~Memory();
 
 	void emplace(int val);
@@ -20,6 +20,5 @@ public:
 
 private:
 	std::vector<std::unique_ptr<int>> heap;
-	size_t size;
 };
 

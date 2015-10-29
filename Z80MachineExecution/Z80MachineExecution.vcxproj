@@ -64,19 +64,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="iohandler.cpp" />
+    <ClCompile Include="utility.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="register.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Z80.cpp" />
+    <ClCompile Include="Z80cloud.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="iohandler.h" />
+    <ClInclude Include="utility.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="register.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="Z80.h" />
+    <ClInclude Include="Z80cloud.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

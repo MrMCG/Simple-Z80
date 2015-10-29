@@ -55,7 +55,7 @@ void Z80::incPCAndLog(int data) {
 void Z80::displayDebug() {
 	registers->displayRegisters();
 	printCodeLine();
-	iohandler::pause();
+	utility::pause();
 	system("CLS");
 }
 
@@ -105,11 +105,23 @@ void Z80::printCodeLine() const {
 
 int Z80::ADD(int a, int b) const { // todo?
 	int ans = a + b;
-	// set carry?
+	if (ans > 0xFF) {
+		registers->setCarry();
+		ans -= 0xFF;
+	}
+	else
+		registers->clearCarry();
 	
-	return a + b;
+	return ans;
 }
 
+int Z80::ADC(int a, int b) const { // todo?
+	return registers->getCarried() ? ADD(a, b) + 1 : ADD(a, b);
+}
+
+int Z80::INC(int a) const { // todo?
+	return a+1;
+}
 
 /*  --------------  */
 /*  --  Opcodes --  */
@@ -120,10 +132,11 @@ void Z80::opcode_0x01() {
 }
 
 void Z80::opcode_0x03() { 
-	registers->set( Register::BC, ADD(registers->getValAt(Register::BC), 1) );
+	registers->set( Register::BC, INC(registers->getValAt(Register::BC)) );
 }
 
 void Z80::opcode_0x22() {
+
 	registers->setDerefFromReg((Register::regPair)getPositionDataINC(), Register::HL);
 }
 
@@ -153,13 +166,15 @@ void Z80::opcode_0xC8() {
 		RET();
 }
 
-void Z80::opcode_0xCE() { // todo
-	
+void Z80::opcode_0xCE() { 
+	registers->set(Register::A, ADC(registers->getValAt(Register::A), getPositionDataINC()));
 }
 
-void Z80::opcode_0xED() { // todo
-	if (getPositionDataINC() == 0x5A)
-		RET(); // temp
+void Z80::opcode_0xED() { 
+	if (getPositionDataINC() == 0x5A) {
+		registers->set(Register::H, ADC(registers->getValAt(Register::H), registers->getValAt(Register::D)));
+		registers->set(Register::L, ADC(registers->getValAt(Register::L), registers->getValAt(Register::E)));
+	}
 	else
 		registers->setRegFromDeref(Register::DE, (Register::regPair)getPositionDataINC());
 }

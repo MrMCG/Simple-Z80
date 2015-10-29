@@ -1,15 +1,19 @@
 #include "test.h"
 
 void testing::runTests() {
+
 	TEST_Registers_1();
 	TEST_Registers_2();
-
+	
 	TEST_Z80_1();
 	TEST_Z80_2();
-	TEST_Z80_3();
+	//TEST_Z80_3();
 
 	TEST_Memory_1();
 	TEST_Memory_2();
+
+	TEST_Z80CLOUD_1();
+
 }
 
 void testing::TEST_Registers_1() {
@@ -48,7 +52,7 @@ void testing::TEST_Registers_2() {
 
 void testing::TEST_Z80_1() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(z80->getRam());
+	utility::loadSnapshot(z80->getRam());
 
 	z80->runCode(0x01);
 
@@ -57,23 +61,24 @@ void testing::TEST_Z80_1() {
 
 void testing::TEST_Z80_2() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(z80->getRam());
+	utility::loadSnapshot(z80->getRam());
 
 	auto time = z80->beginTimed();
+	utility::writeSnapshot(z80->getRam());
 
 	delete z80;
 }
 
 void testing::TEST_Z80_3() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(z80->getRam());
+	utility::loadSnapshot(z80->getRam());
 
 	z80->beginDebug();
 	delete z80;
 
 
 	z80 = new Z80();
-	iohandler::loadSnapshot(z80->getRam());
+	utility::loadSnapshot(z80->getRam());
 
 	z80->beginDebug(0x6c);
 	delete z80;
@@ -87,6 +92,12 @@ void testing::TEST_Memory_1() {
 void testing::TEST_Memory_2() {
 	std::shared_ptr<Memory> mem(new Memory());
 
-	iohandler::loadSnapshot(mem);
-	iohandler::writeSnapshot(mem);
+	utility::loadSnapshot(mem);
+	utility::writeSnapshot(mem);
+}
+
+void testing::TEST_Z80CLOUD_1() {
+	Z80Cloud* z80c = new Z80Cloud();
+
+	delete z80c;
 }

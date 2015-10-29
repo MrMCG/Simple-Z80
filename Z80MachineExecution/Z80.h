@@ -2,18 +2,17 @@
 #include <chrono>
 #include "register.h"
 #include "memory.h"
-#include "iohandler.h"
 
 class Z80{
 public:
 
 	typedef void (Z80::*opcodeFunc)(void); // typedef for map of functions to opcodes
 
-	Z80(int pos = Memory::codeStart ); // position that code starts
+	Z80(int pos = Memory::codeEntry ); // position that code starts
 	~Z80();
 
 	__int64 beginTimed();
-	void beginDebug(int startPoint = Memory::codeStart); 
+	void beginDebug(int startPoint = Memory::codeEntry); 
 	void runCode(int num);
 
 	std::shared_ptr<Memory> getRam() { return ram; };
@@ -27,7 +26,7 @@ private:
 
 	void printCodeLine() const;
 	void RET() { hasFinished = true; };
-	static std::map<int, opcodeFunc> initOpCodeMap();
+	static std::map<int, opcodeFunc> initOpCodeMap(); // static init of opcodemap
 
 	// resources
 	Register* registers;				// collection of registers
@@ -40,6 +39,7 @@ private:
 	// opcode function
 	int ADD(int a, int b) const;
 	int ADC(int a, int b) const;
+	int INC(int a) const;
 
 	// opcodes
 	void opcode_0x01(); // LD BC, x

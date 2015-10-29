@@ -1,8 +1,5 @@
 #pragma once
-#include "memory.h"
-#include "register.h"
-#include "Z80.h"
-#include "iohandler.h"
+#include "Z80cloud.h"
 
 class testing {
 public:
@@ -22,4 +19,8 @@ public:
 
 	void TEST_Memory_1(); // construct and destruct test
 	void TEST_Memory_2(); // IO test
+
+	void TEST_Z80CLOUD_1(); 
+	//void TEST_Z80CLOUD_2(); 
+	//void TEST_Z80CLOUD_3();
 };
