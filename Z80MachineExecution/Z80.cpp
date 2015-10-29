@@ -35,13 +35,28 @@ std::map<int, Z80::opcodeFunc> Z80::initOpCodeMap() {
 
 int Z80::getPositionDataINC() {
 
-	int data = ram->getMem(registers->getValAt(Register::PC));
+	int data = getPositionData();
+	incPCAndLog(data);
+	return data;
+}
 
-	if (debugMode) 
+int Z80::getPositionData() {
+	return ram->getMem(registers->getValAt(Register::PC));
+}
+
+void Z80::incPCAndLog(int data) {
+
+	if (debugMode)
 		codeLine << std::hex << data << "\t";
 
 	registers->incPC();
-	return data;
+}
+
+void Z80::displayDebug() {
+	registers->displayRegisters();
+	printCodeLine();
+	iohandler::pause();
+	system("CLS");
 }
 
 void Z80::runCode(int num) {
@@ -59,19 +74,25 @@ __int64 Z80::beginTimed() {
 	return duration_cast<microseconds>(t2 - t1).count(); // return clock sifference
 }
 
-void Z80::beginDebug() {
+void Z80::beginDebug(int startPoint) {
 	debugMode = true;
+	bool reachedStart = false;
+	int pos = 0;
 	while (!hasFinished) {
-		
-		runCode(getPositionDataINC());
 
 		// display info in a pretty manor
-		registers->displayRegisters();
-		printCodeLine();
-		iohandler::pause();
-		system("CLS");
-		codeLine.str("");
+		if (reachedStart) {
+			displayDebug();
+		}
+		else if ((pos = registers->getValAt(Register::PC)) == startPoint){ // check if PC is at inputted code line
+			reachedStart = true; // start display when at given address
+		}
+
+		codeLine.str(""); // clear previous stream
+		runCode(getPositionDataINC());
 	}
+	
+	displayDebug();
 }
 
 void Z80::printCodeLine() const {

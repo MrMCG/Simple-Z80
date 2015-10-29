@@ -1,7 +1,4 @@
 #pragma once
-#include <vector>
-#include <sstream>
-#include <memory>
 #include <chrono>
 #include "register.h"
 #include "memory.h"
@@ -12,18 +9,22 @@ public:
 
 	typedef void (Z80::*opcodeFunc)(void); // typedef for map of functions to opcodes
 
-	Z80(int pos = 0x64 ); // position that code starts
+	Z80(int pos = Memory::codeStart ); // position that code starts
 	~Z80();
 
 	__int64 beginTimed();
-	void beginDebug();
+	void beginDebug(int startPoint = Memory::codeStart); 
 	void runCode(int num);
 
 	std::shared_ptr<Memory> getRam() { return ram; };
 
 private:
 	
-	int getPositionDataINC(); // gets data pointer at by PC then increments PC
+	int getPositionDataINC();	// gets data pointer at by PC then increments PC
+	int getPositionData();		// gets data pointer at by PC 
+	void incPCAndLog(int data); // inc PC and Log code if in debug
+	void displayDebug();
+
 	void printCodeLine() const;
 	void RET() { hasFinished = true; };
 	static std::map<int, opcodeFunc> initOpCodeMap();

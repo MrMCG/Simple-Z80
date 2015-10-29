@@ -6,8 +6,9 @@
 
 class Register {
 public:
+	
 	enum regName{ PC, A, B, C, D, E, F, H, L, NUM_OF_REG };
-	enum regPair{BC = 0xBC, DE = 0xDE, HL = 0x41};
+	enum regPair{BC = 0xBC, DE = 0xDE, HL = Memory::regHL};
 
 	Register() :Register(std::make_shared<Memory>()){};
 	Register(std::shared_ptr<Memory> mem);

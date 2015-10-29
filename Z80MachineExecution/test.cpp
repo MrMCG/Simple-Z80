@@ -1,13 +1,11 @@
 #include "test.h"
 
-static const std::string snapshot = "CW1(8501)NN.txt";
-
 void testing::runTests() {
 	TEST_Registers_1();
 	TEST_Registers_2();
 
-	//TEST_Z80_1();
-	//TEST_Z80_2();
+	TEST_Z80_1();
+	TEST_Z80_2();
 	TEST_Z80_3();
 
 	TEST_Memory_1();
@@ -50,7 +48,7 @@ void testing::TEST_Registers_2() {
 
 void testing::TEST_Z80_1() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(snapshot, z80->getRam());
+	iohandler::loadSnapshot(z80->getRam());
 
 	z80->runCode(0x01);
 
@@ -59,7 +57,7 @@ void testing::TEST_Z80_1() {
 
 void testing::TEST_Z80_2() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(snapshot, z80->getRam());
+	iohandler::loadSnapshot(z80->getRam());
 
 	auto time = z80->beginTimed();
 
@@ -68,10 +66,16 @@ void testing::TEST_Z80_2() {
 
 void testing::TEST_Z80_3() {
 	Z80* z80 = new Z80();
-	iohandler::loadSnapshot(snapshot, z80->getRam());
+	iohandler::loadSnapshot(z80->getRam());
 
 	z80->beginDebug();
+	delete z80;
 
+
+	z80 = new Z80();
+	iohandler::loadSnapshot(z80->getRam());
+
+	z80->beginDebug(0x6c);
 	delete z80;
 }
 
@@ -83,5 +87,6 @@ void testing::TEST_Memory_1() {
 void testing::TEST_Memory_2() {
 	std::shared_ptr<Memory> mem(new Memory());
 
-	iohandler::loadSnapshot(snapshot, mem);
+	iohandler::loadSnapshot(mem);
+	iohandler::writeSnapshot(mem);
 }
