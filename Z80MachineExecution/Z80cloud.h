@@ -11,9 +11,9 @@ public:
 	const int amountEachGets = numOfEquations / numOfZ80; // 10 each
 	const int amountFirstGets = amountEachGets + (numOfEquations % numOfZ80); // first gets 11
 
-
 	Z80Cloud();
 	~Z80Cloud();
 private:
+	void loadCloudNumbers();
 	std::vector<std::unique_ptr<Z80>>* theCloud;
 };

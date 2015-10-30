@@ -8,8 +8,8 @@
 class Register {
 public:
 	
-	enum regName{ PC, A, B, C, D, E, F, H, L, NUM_OF_REG };
-	enum regPair{BC = 0xBC, DE = 0xDE, HL = Memory::regHL};
+	static const enum regName{ PC, A, B, C, D, E, F, H, L, NUM_OF_REG };
+	static const enum regPair{BC = 0xBC, DE = 0xDE, HL = Memory::regHL};
 
 	Register() :Register(std::make_shared<Memory>()){};
 	Register(std::shared_ptr<Memory> mem);
@@ -25,7 +25,7 @@ public:
 	
 	void setRegFromDeref(regPair regHexSet, regPair regHexData);	// set double reg with defreferenced value in double reg (ram) (high/low)
 	void setDerefFromReg(regPair regHexSet, regPair regHexData);	// set derefrenced double reg (ram) with value in double reg (high/low)
-	void setDerefFromA(regPair regHexSet);	
+	void setDerefFromA(regPair regHexSet);			// set deref double reg with the walue in the Accu (A)
 
 	/*  --  getters  --  */
 
@@ -46,21 +46,23 @@ public:
 	void setCompare() { *registerList[F] |= (1 << 1); }		// Z (or compare) is 2nd bit
 	void clearCompare() { *registerList[F] &= ~(1 << 1); };
 
-private:
 	struct regCombined {
 		regName firstReg;  // low order
 		regName secondReg; // high order
 	};
 
-	regName getMapFirst(regPair regPair) const { return registerMap->at(regPair).firstReg; };
-	regName getMapSecond(regPair regPair) const { return registerMap->at(regPair).secondReg; };
+private:
+	
+
+	regName getMapFirst(regPair regPair) const { return registerMap.at(regPair).firstReg; };
+	regName getMapSecond(regPair regPair) const { return registerMap.at(regPair).secondReg; };
 	
 	int getMemVal(regPair reg) const { return *registerList[getMapFirst(reg)] + *registerList[getMapSecond(reg)]; };
 	
-	void initMap();
+	static std::map<int, regCombined>  initMap();
 
 	// resources
-	std::map<int, regCombined>* registerMap;
+	static std::map<int, regCombined> registerMap;
 	int* registerList[NUM_OF_REG];
 	std::shared_ptr<Memory> ram;
 };

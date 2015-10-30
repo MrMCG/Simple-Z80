@@ -1,7 +1,6 @@
 #pragma once
 #include <chrono>
 #include "register.h"
-#include "memory.h"
 
 class Z80{
 public:
@@ -9,6 +8,7 @@ public:
 	typedef void (Z80::*opcodeFunc)(void); // typedef for map of functions to opcodes
 
 	Z80(int pos = Memory::codeEntry ); // position that code starts
+	Z80(std::shared_ptr<Memory> mem, int pos = Memory::codeEntry);
 	~Z80();
 
 	__int64 beginTimed();

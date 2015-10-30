@@ -3,12 +3,16 @@
 using namespace std::chrono;
 std::map<int, Z80::opcodeFunc> Z80::opCodeMap = Z80::initOpCodeMap();
 
-Z80::Z80(int pos) {
+Z80::Z80(int pos):hasFinished(false), debugMode(false) {
 	ram = std::make_shared<Memory>();
 	registers = new Register(ram);
 	registers->set(Register::PC, pos); // set code entry position
-	hasFinished = false;
-	debugMode = false;
+}
+
+Z80::Z80(std::shared_ptr<Memory> mem, int pos) :hasFinished(false), debugMode(false) {
+	ram = std::move(mem);
+	registers = new Register(ram);
+	registers->set(Register::PC, pos); // set code entry position
 }
 
 Z80::~Z80() {
@@ -105,9 +109,9 @@ void Z80::printCodeLine() const {
 
 int Z80::ADD(int a, int b) const { // todo?
 	int ans = a + b;
-	if (ans > 0xFF) {
+	if (ans >= 256) {
 		registers->setCarry();
-		ans -= 0xFF;
+		ans -= 256;
 	}
 	else
 		registers->clearCarry();

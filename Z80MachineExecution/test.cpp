@@ -2,6 +2,7 @@
 
 void testing::runTests() {
 
+	
 	TEST_Registers_1();
 	TEST_Registers_2();
 	
@@ -11,7 +12,7 @@ void testing::runTests() {
 
 	TEST_Memory_1();
 	TEST_Memory_2();
-
+	
 	TEST_Z80CLOUD_1();
 
 }

@@ -5,19 +5,25 @@ void utility::pause() {
 	std::cin.get();
 };
 
-void utility::loadSnapshot(std::shared_ptr<Memory> mem, std::string fileName) {
-	std::ifstream file(fileName);
-
-	// catch file error
+bool utility::fileError(std::ifstream& file) {
 	try {
 		if (!file.is_open())
-			throw std::runtime_error("ERROR - could not open file: " + fileName);
+			throw std::runtime_error("ERROR - could not open file");
 	}
 	catch (std::runtime_error e){
 		std::cerr << e.what() << std::endl;
 		pause();
-		return;
+		return 1; // error
 	}
+
+	return 0; // no error
+}
+
+void utility::loadSnapshot(std::shared_ptr<Memory> mem, std::string fileName) {
+	std::ifstream file(fileName);
+
+	if (fileError(file))
+		return;
 
 	std::string str;
 	int hexVal;
@@ -41,18 +47,7 @@ void utility::loadSnapshot(std::shared_ptr<Memory> mem, std::string fileName) {
 };
 
 void utility::writeSnapshot(std::shared_ptr<Memory> mem, std::string fileName, int dataStop) {
-	std::ofstream file(fileName);
-
-	// catch file error
-	try {
-		if (!file.is_open())
-			throw std::runtime_error("ERROR - could not open file: " + fileName);
-	}
-	catch (std::runtime_error e){
-		std::cerr << e.what() << std::endl;
-		pause();
-		return;
-	}
+	std::ofstream file(fileName); // create file
 
 	bool doneFour = false;
 	int line = 1; // keep track of formatting

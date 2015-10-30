@@ -1,5 +1,7 @@
 #include "register.h"
 
+std::map<int, Register::regCombined> Register::registerMap = Register::initMap();
+
 Register::Register(std::shared_ptr<Memory> mem) {
 	for (int i = 0; i < NUM_OF_REG; i++) {
 		registerList[i] = new int{ 0 };
@@ -12,11 +14,10 @@ Register::~Register() {
 	for (int i = 0; i < NUM_OF_REG; i++) {
 		delete registerList[i];
 	}
-	delete registerMap;
 }
 
-void Register::initMap() {
-	registerMap = new std::map < int, regCombined >{
+std::map<int, Register::regCombined>  Register::initMap() {
+	return std::map<int, Register::regCombined>{
 		{ 0xBC, regCombined{ B, C } },
 		{ 0xDE, regCombined{ D, E } },
 		{ 0x41, regCombined{ H, L } }, // HL is not in hex!

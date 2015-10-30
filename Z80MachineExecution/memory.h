@@ -16,7 +16,7 @@ public:
 
 	void emplace(int val);
 	void setMem(int loc, int val);
-	int getMem(int loc) const { return *(heap.at(loc)); };
+	int getMem(int loc) const { return *(heap[loc]); };
 
 private:
 	std::vector<std::unique_ptr<int>> heap;
