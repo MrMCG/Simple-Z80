@@ -7,7 +7,7 @@ Z80Cloud::Z80Cloud() {
 	loadCloudNumbers();
 
 	theCloud->at(99)->beginDebug();
-
+	std::cout << "completed z80cloud" << std::endl;
 }
 
 Z80Cloud::~Z80Cloud() {

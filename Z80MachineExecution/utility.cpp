@@ -1,5 +1,12 @@
 #include "utility.h"
 
+int utility::pauseIn() {
+	std::cout << "\nEnter number: ";
+	int x;
+	std::cin >> x;
+	return x;
+};
+
 void utility::pause() {
 	std::cout << "\nPress any key to continue...";
 	std::cin.get();

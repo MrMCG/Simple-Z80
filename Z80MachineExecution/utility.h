@@ -11,7 +11,9 @@ namespace utility {
 	static const std::string cloudFile = "cloud.txt";
 	static const std::string outFile = "CW1Snapshot.txt";
 
+	int pauseIn();
 	void pause();
+
 	void loadSnapshot(std::shared_ptr<Memory> mem, 
 					std::string fileName = snapshotFile);
 

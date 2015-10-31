@@ -59,7 +59,8 @@ void Z80::incPCAndLog(int data) {
 void Z80::displayDebug() {
 	registers->displayRegisters();
 	printCodeLine();
-	utility::pause();
+	if (utility::pauseIn())
+		debugMode = false;
 	system("CLS");
 }
 
@@ -85,7 +86,7 @@ void Z80::beginDebug(int startPoint) {
 	while (!hasFinished) {
 
 		// display info in a pretty manor
-		if (reachedStart) {
+		if (reachedStart && debugMode) {
 			displayDebug();
 		}
 		else if ((pos = registers->getValAt(Register::PC)) == startPoint){ // check if PC is at inputted code line
@@ -96,7 +97,8 @@ void Z80::beginDebug(int startPoint) {
 		runCode(getPositionDataINC());
 	}
 	
-	displayDebug();
+	if (debugMode)
+		displayDebug();
 }
 
 void Z80::printCodeLine() const {
@@ -176,7 +178,7 @@ void Z80::opcode_0xCE() {
 
 void Z80::opcode_0xED() { 
 	if (getPositionDataINC() == 0x5A) {
-		registers->set(Register::H, ADC(registers->getValAt(Register::H), registers->getValAt(Register::D)));
+		registers->set(Register::H, ADD(registers->getValAt(Register::H), registers->getValAt(Register::D)));
 		registers->set(Register::L, ADC(registers->getValAt(Register::L), registers->getValAt(Register::E)));
 	}
 	else

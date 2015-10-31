@@ -6,14 +6,14 @@ void testing::runTests() {
 	TEST_Registers_1();
 	TEST_Registers_2();
 	
+	TEST_Z80_3();
 	TEST_Z80_1();
 	TEST_Z80_2();
-	//TEST_Z80_3();
 
 	TEST_Memory_1();
 	TEST_Memory_2();
 	
-	TEST_Z80CLOUD_1();
+	//TEST_Z80CLOUD_1();
 
 }
 
@@ -65,7 +65,10 @@ void testing::TEST_Z80_2() {
 	utility::loadSnapshot(z80->getRam());
 
 	auto time = z80->beginTimed();
+
 	utility::writeSnapshot(z80->getRam());
+
+	std::cout << "time for CW1 completion (microseconds): " << time << std::endl;
 
 	delete z80;
 }
@@ -75,13 +78,6 @@ void testing::TEST_Z80_3() {
 	utility::loadSnapshot(z80->getRam());
 
 	z80->beginDebug();
-	delete z80;
-
-
-	z80 = new Z80();
-	utility::loadSnapshot(z80->getRam());
-
-	z80->beginDebug(0x6c);
 	delete z80;
 }
 
