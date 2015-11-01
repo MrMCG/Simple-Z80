@@ -11,7 +11,7 @@ namespace utility {
 	static const std::string cloudFile = "cloud.txt";
 	// file out
 	static const std::string outFile = "CW1Results.txt";
-	static const std::string cloudResultsFile = "CW2SResults.txt";
+	static const std::string cloudResultsFile = "CW2Results.txt";
 
 	int cinInt(); // gets and validates input
 	void pause(); // standard press enter to continue

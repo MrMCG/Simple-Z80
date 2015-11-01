@@ -120,10 +120,10 @@ void z80CloudMenu(Scenario app) {
 
 		switch (input){
 		case 1:
-			app.runCloudTimed(true);
+			app.runCloudMulti(1,true);
 			break;
 		case 2:
-			app.runCloudTimed();
+			app.runCloudMulti(1);
 			break;
 		case 3:
 			std::cout << "\nEnter mount of Z80 Clouds to run (1 thread)";

@@ -319,26 +319,16 @@ void Scenario::runSingleGetAverage(int amount) {
 	cout << std::endl;
 }
 
-void Scenario::runCloudTimed(bool write) {
-
-	Z80Cloud* cloud = new Z80Cloud();
-
-	cout << "Time for Z80Cloud completion (milliseconds): " << cloud->runZ80Selection() * 1000 << std::endl;
-
-	if (write) {
-		cloud->writeResults();
-		cout << "Results written to file: " << utility::cloudResultsFile << std::endl;
-	}
-
-	delete cloud;
-}
-
-void Scenario::runCloudMulti(int threads) {
+void Scenario::runCloudMulti(int threads, bool write) {
 	Z80Cloud* cloud = new Z80Cloud();
 	cout << "Time for Z80Cloud completion (milliseconds) on " << threads << " threads: ";
 	cout << cloud->runAllMulithread(threads) * 1000;
-	cloud->writeResults();
-	cout << "\nResults written to file: " << utility::cloudResultsFile << std::endl;
+
+	if (write) {
+		cloud->writeResults();
+		cout << "\nResults written to file: " << utility::cloudResultsFile << std::endl;
+	}
+
 	delete cloud;
 }
 

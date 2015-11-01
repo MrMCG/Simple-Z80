@@ -21,8 +21,7 @@ public:
 	void runSingleTimed(bool write = false); 
 	void runSingleGetAverage(int amount);
 
-	void runCloudTimed(bool write = false);
-	void runCloudMulti(int threads);
+	void runCloudMulti(int threads, bool write = false);
 	void runCloudMultiAverage(int threads, int amount);
 
 	void runCloudFindBest();
