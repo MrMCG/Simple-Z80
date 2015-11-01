@@ -6,23 +6,25 @@ public:
 	Scenario(){};
 	~Scenario(){};
 
-	void runTests();
+	void runTests(); // runs all tests, SHOULD BE DONE EVERY TIME!
 
+	// return true for success
+	bool TEST_filesExist(); // ensure correct files exist
 	bool TEST_registerAllocation(); // basic registry manipulation
 	bool TEST_registerFlags(); // flags and bitwise manipulation
+	bool TEST_memoryLoading(); // memory creation and allocation
+	bool TEST_z80Addition(); // Z80 calculation correctness
+	bool TEST_z80CloudLoad(); // Z80 cloud creation
+	bool TEST_z80CloudProcess(); // Z80 cloud calculation correctness
 
-	void runSingleDebug(int start = Memory::codeEntry); // run single z80 debug mode
+	void runSingleDebug(int start = Memory::codeEntry);
+	void runSingleTimed(bool write = false); 
+	void runSingleGetAverage(int amount);
 
+	void runCloudTimed(bool write = false);
+	void runCloudMulti(int threads);
+	void runCloudMultiAverage(int threads, int amount);
 
+	void runCloudFindBest();
 
-
-	void TEST_Z80_2(); // timing test
-	void TEST_Z80_3(); // debug mode test
-
-	void TEST_Memory_1(); // construct and destruct test
-	void TEST_Memory_2(); // IO test
-
-	void TEST_Z80CLOUD_1(); 
-	//void TEST_Z80CLOUD_2(); 
-	//void TEST_Z80CLOUD_3();
 };

@@ -1,6 +1,5 @@
 #include "Z80.h"
 
-using namespace std::chrono;
 std::map<int, Z80::opcodeFunc> Z80::opCodeMap = Z80::initOpCodeMap();
 
 Z80::Z80(int pos):hasFinished(false), debugMode(false) {
@@ -19,6 +18,21 @@ Z80::~Z80() {
 	delete registers;
 }
 
+void Z80::resetToDefault() { 
+	registers->set(Register::PC, Memory::codeEntry);
+	registers->set(Register::A, 0);
+	registers->set(Register::B, 0);
+	registers->set(Register::C, 0);
+	registers->set(Register::D, 0);
+	registers->set(Register::E, 0);
+	registers->set(Register::F, 0);
+	registers->set(Register::H, 0);
+	registers->set(Register::L, 0);
+	hasFinished = false;
+	debugMode = false;
+}
+
+// init custom lookup table of opcodes to member functions
 std::map<int, Z80::opcodeFunc> Z80::initOpCodeMap() {
 	std::map<int, opcodeFunc> m;
 
@@ -51,7 +65,7 @@ int Z80::getPositionData() {
 void Z80::incPCAndLog(int data) {
 
 	if (debugMode)
-		codeLine << std::hex << data << "\t";
+		codeLine << data << "\t";
 
 	registers->incPC();
 }
@@ -59,6 +73,9 @@ void Z80::incPCAndLog(int data) {
 void Z80::displayDebug() {
 	registers->displayRegisters();
 	printCodeLine();
+	std::cout << "\n  --  Options  --  ";
+	std::cout << "\n0     : Next Line";
+	std::cout << "\nOther : Run Until Finished/Return";
 	if (utility::cinInt())
 		debugMode = false;
 	system("CLS");
@@ -68,37 +85,48 @@ void Z80::runCode(int num) {
 	(this->*opCodeMap[num])();
 }
 
-__int64 Z80::beginTimed() {
-	high_resolution_clock::time_point t1 = high_resolution_clock::now(); // start clock
+double Z80::beginTimed() {
+	// would use high_resolution_clock but ironically,
+	// visual studios version is low resolution and has caused problems
+	// especially with multithreaded scenarios
+
+	double t1 = omp_get_wtime(); // start wall clock
 
 	while (!hasFinished) {
 		runCode(getPositionDataINC());
 	}
 
-	high_resolution_clock::time_point t2 = high_resolution_clock::now(); // stop clock
-	return duration_cast<microseconds>(t2 - t1).count(); // return clock sifference
+	double t2 = omp_get_wtime(); // stop wall clock
+	return t2 - t1; // return clock difference (seconds)
 }
 
 void Z80::beginDebug(int startPoint) {
 	debugMode = true;
 	bool reachedStart = false;
 	int pos = 0;
+	codeLine << std::hex; // set hex stream;
+
 	while (!hasFinished) {
+
+		pos = registers->getValAt(Register::PC); // get PC value
 
 		// display info in a pretty manor
 		if (reachedStart && debugMode) {
 			displayDebug();
 		}
-		else if ((pos = registers->getValAt(Register::PC)) == startPoint){ // check if PC is at inputted code line
+		else if (pos == startPoint){ // check if PC is at inputted code line
 			reachedStart = true; // start display when at given address
 		}
 
 		codeLine.str(""); // clear previous stream
+		codeLine << pos << ":\t"; // add line number (hex)
 		runCode(getPositionDataINC());
 	}
 	
-	if (debugMode)
+	if (debugMode) { // final display
+		std::cout << "\n  -- !!  PROGRAM FINISHED  !! --  \n";
 		displayDebug();
+	}
 }
 
 void Z80::printCodeLine() const {
@@ -109,7 +137,7 @@ void Z80::printCodeLine() const {
 /*  --  Opcode functions --  */
 /*  -----------------------  */
 
-int Z80::ADD(int a, int b) const { // todo?
+int Z80::ADD(int a, int b) const { 
 	int ans = a + b;
 	if (ans >= 256) {
 		registers->setCarry();
@@ -121,11 +149,11 @@ int Z80::ADD(int a, int b) const { // todo?
 	return ans;
 }
 
-int Z80::ADC(int a, int b) const { // todo?
+int Z80::ADC(int a, int b) const { 
 	return registers->getCarried() ? ADD(a, b) + 1 : ADD(a, b);
 }
 
-int Z80::INC(int a) const { // todo?
+int Z80::INC(int a) const { 
 	return a+1;
 }
 
@@ -159,7 +187,8 @@ void Z80::opcode_0x3E() {
 }
 
 void Z80::opcode_0xBC() {
-	if (registers->getValAt(Register::A) == registers->getValAt(Register::H))
+	if (registers->getValAt(Register::A) == registers->getValAt(Register::H) &&
+		registers->getValAt(Register::L) == 0) // incase number is divisible by 256 (low order always = 0)
 		registers->setCompare(); 
 }
 

@@ -6,7 +6,7 @@ Memory::Memory(int hexSize) {
 }
 
 Memory::~Memory() {
-	heap.clear();
+	heap.clear(); // ensure vector is cleared
 }
 
 void Memory::setMem(int loc, int val) {

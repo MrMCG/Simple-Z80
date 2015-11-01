@@ -1,10 +1,11 @@
 #include "register.h"
 
+// custom lookup table for maps to registers
 std::map<int, Register::regCombined> Register::registerMap = Register::initMap();
 
 Register::Register(std::shared_ptr<Memory> mem) {
 	for (int i = 0; i < NUM_OF_REG; i++) {
-		registerList[i] = new int{ 0 };
+		registerList[i] = new int{ 0 }; // init registers
 	}
 	initMap();
 	ram = std::move(mem);
@@ -12,11 +13,12 @@ Register::Register(std::shared_ptr<Memory> mem) {
 
 Register::~Register() {
 	for (int i = 0; i < NUM_OF_REG; i++) {
-		delete registerList[i];
+		delete registerList[i]; // delete each register
 	}
 }
 
 std::map<int, Register::regCombined>  Register::initMap() {
+	// map values to correct registers
 	return std::map<int, Register::regCombined>{
 		{ 0xBC, regCombined{ B, C } },
 		{ 0xDE, regCombined{ D, E } },

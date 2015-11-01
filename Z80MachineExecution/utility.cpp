@@ -1,9 +1,19 @@
 #include "utility.h"
 
 int utility::cinInt() {
-	std::cout << "\nEnter number: ";
-	int x;
+	std::cout << "\nEnter Number: ";
+	int x = -1;
 	std::cin >> x;
+
+	while (std::cin.fail()) {
+		std::cout << "ERROR - Not A Number | Enter Number: ";
+		std::cin.clear(); // clear error flag
+		std::cin.ignore(255, '\n'); // clear input
+		std::cin >> x;		
+	}
+
+	std::cin.sync(); // remove buffer excess
+
 	return x;
 };
 
@@ -12,21 +22,27 @@ void utility::pause() {
 	std::cin.get();
 };
 
-void utility::validateIntInput() {
-	if (std::cin.fail()) {
-		std::cin.clear();
-		std::cin.ignore();
-	}
-}
-
 bool utility::fileError(std::ifstream& file) {
 	try {
 		if (!file.is_open())
-			throw std::runtime_error("ERROR - could not open file");
+			throw std::runtime_error("\n\nERROR - could not open file\nContinuing will crash the program!\nPlease Exit");
 	}
 	catch (std::runtime_error e){
 		std::cerr << e.what() << std::endl;
 		pause();
+		return 1; // error
+	}
+
+	return 0; // no error
+}
+
+bool utility::fileErrorTest(std::ifstream& file) {
+	try {
+		if (!file.is_open())
+			throw std::runtime_error("");
+	}
+	catch (std::runtime_error e){
+		std::cerr << e.what() << std::endl;
 		return 1; // error
 	}
 
@@ -41,14 +57,12 @@ void utility::loadSnapshot(std::shared_ptr<Memory> mem, std::string fileName) {
 
 	std::string str;
 	int hexVal;
-	while (file) {
-		file >> str;
+	while (file >> str) {
 
-		if (str.length() == 4) { // remove brackets
-			str = str.substr(1, str.length() - 2);
+		if (str.length() == 4) { // if brackets exist. eg. (BC)
+			str = str.substr(1, str.length() - 2); // remove brackets
 			if (!str.compare("HL")) {
-				//str = Memory::regHL; // set hex for HL
-				mem->emplace(Memory::regHL);
+				mem->emplace(Memory::regHL); // set hex for HL
 				continue;
 			}
 		}
@@ -65,8 +79,10 @@ void utility::writeSnapshot(std::shared_ptr<Memory> mem, std::string fileName, i
 
 	bool doneFour = false;
 	int line = 1; // keep track of formatting
+	file << std::uppercase << std::hex; // set uppercase hex
+
 	for (int i = 1; i < dataStop; i++) {
-		file << std::uppercase << std::hex << mem->getMem(i) << "\t";
+		file << mem->getMem(i) << "\t";
 
 		// do this to keep formatting :(		
 		if (line % 4 == 0) {

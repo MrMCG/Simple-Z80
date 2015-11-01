@@ -1,5 +1,5 @@
 #pragma once
-#include <chrono>
+#include <omp.h>
 #include "register.h"
 
 class Z80{
@@ -11,9 +11,10 @@ public:
 	Z80(std::shared_ptr<Memory> mem, int pos = Memory::codeEntry);
 	~Z80();
 
-	__int64 beginTimed();
-	void beginDebug(int startPoint = Memory::codeEntry); 
-	void runCode(int num);
+	double beginTimed(); // returns execution time
+	void beginDebug(int startPoint = Memory::codeEntry); // run in debug mode
+	void runCode(int num); // run opcode (hex)
+	void resetToDefault(); // reset z80 with default settings
 
 	std::shared_ptr<Memory> getRam() { return ram; };
 
@@ -29,12 +30,12 @@ private:
 	static std::map<int, opcodeFunc> initOpCodeMap(); // static init of opcodemap
 
 	// resources
-	Register* registers;				// collection of registers
-	std::shared_ptr<Memory> ram;		// stored memory
-	bool hasFinished;					// program has ended
-	bool debugMode;						// if in debug mode
-	std::stringstream codeLine;			// opcode used for debug mode
-	static std::map<int, opcodeFunc> opCodeMap;	// map of opcodes
+	Register* registers;			// collection of registers
+	std::shared_ptr<Memory> ram;	// stored memory
+	bool hasFinished;				// program has ended
+	bool debugMode;					// if in debug mode
+	std::stringstream codeLine;		// opcode used for debug mode
+	static std::map<int, opcodeFunc> opCodeMap;	// static map of opcodes
 
 	// opcode function
 	int ADD(int a, int b) const;

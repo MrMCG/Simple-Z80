@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <fstream>
 #include <vector>
 #include <memory>
@@ -7,9 +6,9 @@
 class Memory {
 public:
 
-	static const int maxHeapSize = 0x80;
-	static const int regHL = 0x41;
-	static const int codeEntry = 0x64;
+	static const int maxHeapSize = 0x82; // full size of memory 
+	static const int regHL = 0x41; // represents register HL
+	static const int codeEntry = 0x64; // hex line that code starts
 
 	Memory(int hexSize = maxHeapSize);
 	~Memory();
