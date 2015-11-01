@@ -8,7 +8,9 @@
 class Register {
 public:
 	
+	// used for accessing registerList
 	static const enum regName{ PC, A, B, C, D, E, F, H, L, NUM_OF_REG };
+	// used to reference double registers when reading in from file
 	static const enum regPair{BC = 0xBC, DE = 0xDE, HL = Memory::regHL};
 
 	Register() :Register(std::make_shared<Memory>()){};
@@ -17,21 +19,23 @@ public:
 
 	/*  -- setters  --   */
 
-	void set(regName reg, int num);					// set single reg with number
-	void set(regPair regP, int num);				// set double reg with number (high/low)
+	void set(regName reg, int num); // set single reg with number
+	void set(regPair regP, int num); // set double reg with number (high/low)
 	
-	void set(regName regSet, regName regData);		// set single reg with value of single reg
-	void set(regPair regPSet, regPair regPData);	// set double reg with value of other double reg (high/low)
+	void set(regName regSet, regName regData); // set single reg with value of single reg
+	void set(regPair regSet, regName regData); // set double reg with value of single reg
+
+	void set(regPair regPSet, regPair regPData); // set double reg with value of other double reg (high/low)
 	
-	void setRegFromDeref(regPair regHexSet, regPair regHexData);	// set double reg with defreferenced value in double reg (ram) (high/low)
-	void setDerefFromReg(regPair regHexSet, regPair regHexData);	// set derefrenced double reg (ram) with value in double reg (high/low)
-	void setDerefFromA(regPair regHexSet);			// set deref double reg with the walue in the Accu (A)
+	void setRegFromDeref(regPair regHexSet, regPair regHexData); // set double reg with defreferenced value in double reg (ram) (high/low)
+	void setDerefFromReg(regPair regHexSet, regPair regHexData); // set derefrenced double reg (ram) with value in double reg (high/low)
+	void setDerefFromA(regPair regHexSet); // set deref double reg with the walue in the Accu (A)
 
 	/*  --  getters  --  */
 
 	int getValAt(regName reg) const { return *registerList[reg]; };
-	int getValAt(regPair reg) const { return *registerList[getMapFirst(reg)] + 
-											(*registerList[(getMapSecond(reg))] * 256); }; // high order is number of 256's
+	int getValAt(regPair reg) const { return *registerList[getFirstReg(reg)] + 
+											(*registerList[(getSecondReg(reg))] * 256); }; // high order is number of 256's
 
 	int getCarried() const { return (*registerList[F] & 1); };
 	int getZ() const { return ((*registerList[F] >> 1) & 1); };
@@ -53,11 +57,9 @@ public:
 
 private:
 	
-
-	regName getMapFirst(regPair regPair) const { return registerMap.at(regPair).firstReg; };
-	regName getMapSecond(regPair regPair) const { return registerMap.at(regPair).secondReg; };
-	
-	int getMemVal(regPair reg) const { return *registerList[getMapFirst(reg)] + *registerList[getMapSecond(reg)]; };
+	// return each register in pair
+	regName getFirstReg(regPair regPair) const { return registerMap.at(regPair).firstReg; };
+	regName getSecondReg(regPair regPair) const { return registerMap.at(regPair).secondReg; };
 	
 	static std::map<int, regCombined>  initMap();
 

@@ -59,7 +59,7 @@ void Z80::incPCAndLog(int data) {
 void Z80::displayDebug() {
 	registers->displayRegisters();
 	printCodeLine();
-	if (utility::pauseIn())
+	if (utility::cinInt())
 		debugMode = false;
 	system("CLS");
 }

@@ -1,22 +1,58 @@
-#include "test.h"
+#include "scenario.h"
+
+void z80TimedMenu(Scenario app);
+void z80DebugMenu(Scenario app);
+void z80CloudMenu(Scenario app);
+
 int main() {
 
-	testing test; 
+	Scenario app; 
 
 	int input = -1;
 
 	while (input != 0) {
-		if (input == 1)
-			test.TEST_Z80_2();
-		else if (input == 2)
-			test.TEST_Z80_3();
-		else if (input == 3) // TODO
-			test.TEST_Z80CLOUD_1();
-		std::cout << " -- Z80 -- \n1: for timed \n2: for step through \n3: for z80Cloud" << std::endl;
-		std::cin >> input;
-	}
-	
+		system("CLS");
 
-	test.runTests();
+		switch (input){
+		case 1:
+			app.runTests();
+			break;
+		case 2:
+			z80TimedMenu(app);
+			break;
+		case 3: 
+			z80DebugMenu(app);
+			break;
+		case 4:
+			z80CloudMenu(app);
+			break;
+		default:
+			break;
+		}
+
+		std::cout << "\n -- Main Menu -- \n"
+			<< "\n0: Quit"
+			<< "\n1: Run Tests"
+			<< "\n2: Z80 Timed Menu"
+			<< "\n3: Z80 Debug Menu" 
+			<< "\n4: Z80 Cloud Menu"
+			<< std::endl;
+
+		input = utility::cinInt();
+		utility::validateIntInput();
+		
+	}
 	return 0;
+}
+
+void z80TimedMenu(Scenario app) {
+
+}
+
+void z80DebugMenu(Scenario app) {
+	app.runSingleDebug();
+}
+
+void z80CloudMenu(Scenario app) {
+
 }

@@ -1,6 +1,6 @@
 #include "utility.h"
 
-int utility::pauseIn() {
+int utility::cinInt() {
 	std::cout << "\nEnter number: ";
 	int x;
 	std::cin >> x;
@@ -11,6 +11,13 @@ void utility::pause() {
 	std::cout << "\nPress any key to continue...";
 	std::cin.get();
 };
+
+void utility::validateIntInput() {
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore();
+	}
+}
 
 bool utility::fileError(std::ifstream& file) {
 	try {
